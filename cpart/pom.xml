@@ -8,28 +8,98 @@
         <version>1.0</version>
     </parent>
 
-    <properties>
-        <native.source.dir>src/main/native</native.source.dir>
-    </properties>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.timestop</groupId>
     <artifactId>cpart</artifactId>
     <packaging>pom</packaging>
 
-    <profiles>
-        <profile>
-            <id>win32</id>
-            <activation>
-                <property>
-                    <name>platform</name>
-                    <value>win32</value>
-                </property>
-            </activation>
-            <modules>
-                <module>win32</module>
-            </modules>
-        </profile>
-    </profiles>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>1.0-alpha-8</version>
+                <extensions>true</extensions>
+                <configuration>
+
+                    <!--
+                    <javahOS>linux</javahOS>
+                    <javahOS>win32</javahOS>
+                    -->
+
+                    <javahOS>${os_name}</javahOS>
+
+                    <!--
+                    <This is dealt in generate-header script>
+                    <javahOutputDirectory>${project.basedir}/native/include</javahOutputDirectory>
+                    <javahClassNames>
+                        <javahClassName>com.example.NativeApplication</javahClassName>
+                    </javahClassNames>
+                    -->
+
+                    <sources>
+                        <source>
+                            <directory>src</directory>
+                            <fileNames>
+                                <fileName>timestop_ru_Main.c</fileName>
+                            </fileNames>
+                        </source>
+                        <source>
+                            <directory>src</directory>
+                        </source>
+                    </sources>
+                    <compilerProvider>generic-classic</compilerProvider>
+                    <compilerExecutable>gcc</compilerExecutable>
+
+                    <compilerStartOptions>
+                        <compilerStartOption>-m64</compilerStartOption>
+                        <compilerStartOption>-fpic</compilerStartOption>
+                        <compilerStartOption>-Wall</compilerStartOption>
+                        <compilerStartOption>-Wextra</compilerStartOption>
+                        <compilerStartOption>-ansi</compilerStartOption>
+                        <compilerStartOption>-g</compilerStartOption>
+                        <compilerStartOption>-O3</compilerStartOption>
+                    </compilerStartOptions>
+
+                    <linkerOutputDirectory>target</linkerOutputDirectory>
+                    <linkerExecutable>gcc</linkerExecutable>
+
+                    <linkerStartOptions>
+                        <linkerStartOption>-m64</linkerStartOption>
+                        <linkerStartOption>-shared</linkerStartOption>
+                    </linkerStartOptions>
+
+                    <linkerFinalName></linkerFinalName>
+
+                    <linkerEndOptions>
+                        <linkerEndOption>-o ${project.build.directory}/${lib_name}</linkerEndOption>
+                    </linkerEndOptions>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>javah</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>initialize</goal>
+                            <goal>compile</goal>
+                            <goal>link</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+
+        </plugins>
+
+    </build>
 
 </project>

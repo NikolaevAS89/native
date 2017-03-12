@@ -15,15 +15,39 @@
         <module>cpart</module>
     </modules>
 
+    <properties>
+        <native.source.dir>src</native.source.dir>
+    </properties>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>native-maven-plugin</artifactId>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+
+    <profiles>
+        <profile>
+            <id>win</id>
+            <activation>
+                <property>
+                    <name>platform</name>
+                    <value>win</value>
+                </property>
+            </activation>
+            <properties>
+                <os_name>win32</os_name>
+                <lib_name>spil.dll</lib_name>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>Linux</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>platform</name>
+                    <value>nix</value>
+                </property>
+            </activation>
+            <properties>
+                <os_name>linux</os_name>
+                <lib_name>libspil.so</lib_name>
+            </properties>
+        </profile>
+    </profiles>
 </project>
