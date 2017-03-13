@@ -15,11 +15,6 @@
         <module>cpart</module>
     </modules>
 
-    <properties>
-        <native.source.dir>src</native.source.dir>
-    </properties>
-
-
     <profiles>
         <profile>
             <id>win</id>
